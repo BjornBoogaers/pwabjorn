@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plaatsjes pagina 2</title>
+    <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ractive-events-keys@0.2.1/dist/ractive-events-keys.min.js"></script>
+    <style>
+        #active{
+            font-weight: bold;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="target"></div>
+<script id="template" type="text/ractive">
+<h1>Pagina 2</h1>
+    <button on-click="start">Submit</button>
+    {{#each url:num}}
+    <ul>
+	<li>{{url[num].name}}</li>
+	<li>{{url[num].country}}</li>
+	<li>{{url[num].coord.lon}}</li>
+	<li>{{url[num].coord.lat}}</li>
+	</ul>
+	{{/each}}
+
+	<a href="plaatsen.html" target="_blank"> 1</a>
+	<a href="plaatsen2.html" target="_blank" id="active"> 2 </a>
+	<a href="plaatsen3.html" target="_blank">  3</a>
+</script>
+
+<script>
+    let ractive = new Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            url: ' '
+        }
+    });
+    ractive.on({
+        start: function() {
+            fetch('https://www.dennisvanriet.nl/ractive_rest/ractive_data.php?start=1000&size=1000')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(myJson) {
+                    ractive.set('url', myJson);
+                });
+        }
+    });
+</script>
+</body>
+</html>
